@@ -1,3 +1,6 @@
+#!python3
+# simple use of Naive Bayes and NLTK processing
+
 import nltk
 import random
 from nltk.corpus import movie_reviews
