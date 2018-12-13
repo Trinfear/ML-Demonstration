@@ -18,7 +18,7 @@ for word in movie_reviews.words():
 
 word_set = nltk.FreqDist(word_set)
 
-feature_set = list(word_set.keys())[:3000]
+feature_set = list(word_set.keys())[:4500]
 
 
 def get_features(doc):
@@ -32,11 +32,11 @@ def get_features(doc):
 
 feature_sets = [(get_features(rev), category) for (rev, category) in documents]
 
-train_set = feature_sets[:1600]  # 2000 examples in total
-test_set = feature_sets[1600:]
+train_set = feature_sets[:1800]  # 2000 examples in total
+test_set = feature_sets[1800:]
 
 clf = nltk.NaiveBayesClassifier.train(train_set)
 
 
 print('Classifier Accuracy: ', (nltk.classify.accuracy(clf, test_set))*100)
-clf.show_most_informative_features(15)
+# clf.show_most_informative_features(15)
