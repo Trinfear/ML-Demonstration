@@ -7,7 +7,7 @@ A supervised sorting algorithm, useful for finding which group of an already ext
 A supervised grouping and clustering algorithm, useful in finding patterns in data and organizing data, if one already knows
 the rough number of groups they hope to find
 ##### Linear Regression
-A supervised modeling algorithm, useful for trying to find the linearr relationship between one or more features and a label
+A supervised modeling algorithm, useful for trying to find the linear relationship between one or more features and a label
 ##### Mean Shift
 An unsupervised version of K Means which does not require previous knowledge on the number of groups. Useful for simple processing on
 new and unexplored data
