@@ -1,5 +1,5 @@
 ## **Machine Learning Demonstrations**
-A set of Scripts demonstrating use cases and from scratch examples of several common algorithms in machine learning and datascience.
+A set of Scripts demonstrating use cases and from-scratch examples of several common algorithms in machine learning and datascience.
 ### Contents
 ##### K Nearest Neighbors
 A supervised sorting algorithm, useful for finding which group of an already extant set of groups a new data point falls into
