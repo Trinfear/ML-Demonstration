@@ -68,31 +68,32 @@ from collections import Counter
 
 
 class Node():
-    def __init__(divider):
+    def __init__(self, divider):
         self.divider = divider      # tuple, (location of feature, is_numeric_bool, feature_value)
         self.child_one = None
         self.child_two = None
         pass
 
-    def predict(features):
+    def predict(self, features):
         # intake a full feature set
         # compare to question
         # pass to child one or two
         divider = self.divider
-        value = features[divider[0]]
+        feature = divider[0] - 1        # take into account lack of lable.  better way to do this?
+        value = features[feature]
         if divider[1]:
             if value >= divider[2]:
-                answer = child_one.predict(features)
+                answer = self.child_one.predict(features)
             else:
-                answer = child_two.predict(features)
+                answer = self.child_two.predict(features)
         else:
             if value == divider[2]:
-                answer = child_one.predict(features)
+                answer = self.child_one.predict(features)
             else:
-                answer = child_two.predict(features)
+                answer = self.child_two.predict(features)
         return answer
 
-    def draw_tree():
+    def draw_tree(self):
         # intake how many tabs
         # print that number of tabs and then the divider
         # send to both children with number of tabs plus 1
@@ -100,18 +101,18 @@ class Node():
 
 
 class Leaf():
-    def __init__(data):
+    def __init__(self, data):
         self.probabilities = self.calculate_probabilities(data)     # array, of tuples, [(object, probability of object)]
 
-    def calculate_probablities(data):
+    def calculate_probabilities(self, data):
         labels = []
         for datum in data:
             labels.append(datum[0])
-        probabilties = Counter(labels).most_common()
+        probabilities = Counter(labels).most_common()
         return probabilities
 
-    def predict():
-        return self.probabilties
+    def predict(self, features):
+        return self.probabilities
     
 
     def draw_tree():
@@ -130,18 +131,33 @@ def get_gini(data):
     return gini
 
 
-def adj_gini():     # just have this chunk of code within generate optimal question instead of calling it here?
+def adj_gini(group_one, group_two):     # just have this chunk of code within generate optimal question instead of calling it here?
     # take two datasets
     # get gini for both
-    # 
-    pass
+    # return average gini weighted by group size
+    size_one = len(group_one)
+    size_two = len(group_two)
+    size_total = size_one + size_two
+
+    if group_one:
+        gini_one = get_gini(group_one)
+    else:
+        gini_one = 1
+    if group_two:
+        gini_two = get_gini(group_two)
+    else:
+        gini_two = 1
+
+    gini_avg = (size_one * gini_one + size_two * gini_two) / size_total     
+    
+    return gini_avg
 
 
 def split_data(data, divider):
     group_one = []
     group_two = []
     for datum in data:
-        value = features[divider[0]]
+        value = datum[divider[0]]
         if divider[1]:
             if value >= divider[2]:
                 group_one.append(datum)
@@ -159,8 +175,9 @@ def optimal_question(data):
     best_change = 0
     best_divider = None
     current_gini = get_gini(data)
-    for feature in range(len(data[0])):         # this assumes all datums are the same length
-        possible_values = set([x for x in data[n][feature] for n in range(len(data))])      # this is clunky, better way to do this?
+    # get rid of labels?
+    for feature in range(1, len(data[0])):         # this assumes all datums are the same length
+        possible_values = set([data[n][feature] for n in range(len(data))])      # this is clunky, better way to do this?
         for value in possible_values:
             if type(value) == int or type(value) == float:
                 is_num = True
@@ -170,7 +187,9 @@ def optimal_question(data):
             group_one, group_two = split_data(data, question)
             
             new_gini = adj_gini(group_one, group_two)
-            change = new_gini - current_gini
+            change = current_gini - new_gini            # this is getting a rounding error? return e-17 continously
+            if change < 0.001:
+                change = 0      # fixes weird rounding errors.  better way to do this?
 
             if change > best_change:
                 best_change = change
@@ -188,8 +207,10 @@ def generate_tree(data):
     if change > 0:
         node = Node(question)
         group_one, group_two = split_data(data, question)
-        node.child_one = generate_tree(group_one)
-        node.child_two = generate_tree(group_two)
+        if group_one:
+            node.child_one = generate_tree(group_one)
+        if group_two:
+            node.child_two = generate_tree(group_two)
         return node
 
 
@@ -204,9 +225,8 @@ data_set = [['apple', 3, 'green', 'round'],
 
 new_fruit = [2, 'red', 'round']
 
-print(get_gini(data_set))
-#classifier = generate_tree(data_set)
-#print(classifier.predict(new_fruit))
+classifier = generate_tree(data_set)
+print(classifier.predict(new_fruit))
 ##classifier.draw_tree()
 
 
