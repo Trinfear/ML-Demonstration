@@ -63,6 +63,9 @@ data
 
 '''
 
+import numpy as np
+from collections import Counter
+
 
 class Node():
     def __init__(divider):
@@ -96,21 +99,34 @@ class Node():
 
 
 class leaf():
-    def __init__():
-        # all probality already calculated in generate tree, no spliting data, just generate probability table
-        pass
+    def __init__(data):
+        self.probabilities = self.calculate_probabilities(data)     # array, of tuples, [(object, probability of object)]
+
+    def calculate_probablities(data):
+        labels = []
+        for datum in data:
+            labels.append(datum[0])
+        probabilties = Counter(labels).most_common()
+        return probabilities
 
     def predict():
-        pass
+        return self.probabilties
+    
 
     def draw_tree():
         pass
 
 
-def get_gini():
+def get_gini(data):
     # find most common datum
     # return 1 - fraction of total data that most common datum makes up
-    pass
+    labels = []
+    for datum in data:
+        labels.append(datum[0])
+
+    best_guess = Counter(labels).most_common(1)     # returns [(object, count)]
+    gini = 1 - (best_guess[0][1] / len(labels))
+    return gini
 
 
 def adj_gini():     # just have this chunk of code within generate optimal question instead of calling it here?
@@ -125,8 +141,9 @@ def optimal_question():
     pass
 
 
-def generate_tree():
+def generate_tree(data):
     # intake a full real dataset, not just posibilites
+    gini = get_gini(data)
     pass
 
 
@@ -134,16 +151,17 @@ def generate_tree():
 data_set = [['apple', 3, 'green', 'round'],
             ['lemon', 2, 'yellow', 'stretched'],
             ['pear', 3, 'green', 'stretched'],
-            ['orange' 3, 'orange', 'round'],
+            ['orange', 3, 'orange', 'round'],
             ['apple', 3, 'red', 'round'],
             ['apple', 2, 'yellow', 'round'],
             ['pear', 2, 'yellow', 'stretched']]
 
 new_fruit = [2, 'red', 'round']
 
-classifier = generate_tree(data_set)
-print(classifier.predict(new_fruit))
-classifier.draw_tree()
+print(get_gini(data_set))
+##classifier = generate_tree(data_set)
+##print(classifier.predict(new_fruit))
+##classifier.draw_tree()
 
 
 
