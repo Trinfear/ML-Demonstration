@@ -12,16 +12,23 @@ x, y = make_blobs(n_samples=50, centers=centers, n_features=2)
 
 
 class MeanShift:
-    def __init__(self, radius=4, norm_step=30):
+    # kMeans but no group number input required
+    def __init__(self, radius=None, norm_step=30):
+        # radius is max size of each group in euclidean distance
+        # norm step is used to calculate radius if none is given, roughly the average step size on the graph
         self.radius = radius
         self.centroids = {}
         self.radius_norm_step = norm_step
 
     def fit(self, data):
-
-        if self.radius is None:  # calculate a starting point if no bandwidth is given as a baseline
+        # makes each datapoint a center for its own group and find all points within the radius
+        # move the centroid to the center of all the points
+        # centroids within a certain distance of eachother become identical
+        # continue until now change is made in the centroids
+        
+        if self.radius is None:  # calculate a starting point if no radius is given as a baseline
             all_data_centroid = np.average(data, axis=0)
-            all_data_norm = np.linalg.norm(all_data_centroid)  # this could be condensed to one line?
+            all_data_norm = np.linalg.norm(all_data_centroid)  # this could be condensed to one line? less clear what things are
             self.radius = all_data_norm / self.radius_norm_step
 
         centroids = {}
@@ -32,6 +39,7 @@ class MeanShift:
         weights = [i for i in range(self.radius_norm_step)][::-1]
 
         while True:
+            # iterates through centroids until the new centroids are identical to previous ones
             new_centroids = []
             for i in centroids:
                 in_bandwidth = []
@@ -52,7 +60,7 @@ class MeanShift:
             for i in range(len(uniques)):
                 centroids[i] = np.array(uniques[i])
 
-            optimized = True
+            optimized = True    # assumes optimized until it finds a point where it isn't
 
             for i in centroids:
                 if not np.array_equal(centroids[i], prev_centroids[i]):
@@ -65,8 +73,11 @@ class MeanShift:
 
         self.centroids = centroids
 
-    def predict(self):
-        pass
+    def predict(self, features):
+        # find closest centroid and return that group
+        distances = [np.linalg.norm(features - centroid) for centroid in self.centroids]
+        classification = distances.index(min(distances))
+        return classification
 
 
 clf = MeanShift()
