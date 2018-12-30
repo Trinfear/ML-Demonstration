@@ -8,6 +8,8 @@ plt.style.use('ggplot')
 
 
 def create_data_set(size, variance, slope):
+    # creates data following a line, with a prespecified variation from that line
+    # size is the number of points generated, variance is max distance from line, slope is slope of the line
     x = []
     y = []
     for i in range(size):
@@ -21,6 +23,7 @@ def create_data_set(size, variance, slope):
 
 
 def calculate_slope_and_intercept(x, y):
+    # calculates line
     slope = (((mean(x) * mean(y)) - mean(x * y)) /
              (mean(x)*mean(x) - mean(x * x)))
     intercept = mean(y) - slope * mean(x)
@@ -29,6 +32,7 @@ def calculate_slope_and_intercept(x, y):
 
 
 def coefficient_of_determination(data, line):
+    # calculates reliability of calculations
     data_mean = [mean(data) for y in data]
 
     squared_error_regression = sum((line - data) * (line - data))
