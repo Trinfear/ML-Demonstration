@@ -10,12 +10,14 @@ centers = 4
 
 x, y = make_blobs(n_samples=50, centers=centers, n_features=2)
 
-colors = ['g', 'r', 'c', 'b']
+# set of colors which may be used for group labelings, repeat if too many groups
+colors = 5 * ['g', 'r', 'c', 'b']
 
 
 class KMeans:
 
     def __init__(self, k=2, tol=0.001, max_iter=300):
+        # k = number of groups to find, tol = amount of change before assumed correct, max iter = maximum iterations before return
         self.k = k
         self.tol = tol
         self.max_iter = max_iter
@@ -23,6 +25,9 @@ class KMeans:
         self.classifications = {}
 
     def fit(self, data):
+        # intakes a set of coordinates representing datapoints in n-dimmensional space
+        # creates centroids at random and finds all members of their groups
+        # move the centroids to the centers of the respective groups and recalculates
         self.centroids = {}
 
         for i in range(self.k):
@@ -56,6 +61,7 @@ class KMeans:
                 break
 
     def predict(self, features):
+        # finds closest centroid and returns that group
         distances = [np.linalg.norm(features - self.centroids[centroid]) for centroid in self.centroids]
         classification = distances.index(min(distances))
         return classification
