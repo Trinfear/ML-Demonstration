@@ -1,6 +1,13 @@
 ## **Machine Learning Demonstrations**
 A set of Scripts demonstrating use cases and from-scratch examples of several common algorithms in machine learning and datascience.
+##### Use vs From Scratch
+the uses cases are meant to demonstrate knowledge of existing algorithms and the situations and types of data on which the algorithms
+are used.  The from scratch examples are meant to demonstrate a strong understanding of the inner workings of the algorithms, and
+how they may work when being used as part of a broader project.
 ### Contents
+##### Decision Tree
+a supervised sorting algorithm, decision trees are easy to use and understand, and at times require less data preperation. They work
+well when there is data that is nonlinearly related.  It can also be used on strings without requiring any form of embedding.
 ##### K Nearest Neighbors
 A supervised sorting algorithm, useful for finding which group of an already extant set of groups a new data point falls into
 ##### K Means
