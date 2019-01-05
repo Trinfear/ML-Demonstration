@@ -6,8 +6,10 @@ are used.  The from scratch examples are meant to demonstrate a strong understan
 how they may work when being used as part of a broader project.
 ### Contents
 ##### Decision Tree
-a supervised sorting algorithm, decision trees are easy to use and understand, and at times require less data preperation. They work
+A supervised sorting algorithm, decision trees are easy to use and understand, and at times require less data preperation. They work
 well when there is data that is nonlinearly related.  It can also be used on strings without requiring any form of embedding.
+##### Simple Neural Networks
+A group of supervised learning algorithms, useful for a variety of tasks depending on the specific type of network used.  Can technically be used to approach most problems but are most useful when provided with a larger amount of data, and other algorithms are incapable of returning accurate results, or when a very high degree of precision is required.
 ##### K Nearest Neighbors
 A supervised sorting algorithm, useful for finding which group of an already extant set of groups a new data point falls into
 ##### K Means
