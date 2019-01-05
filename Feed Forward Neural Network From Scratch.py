@@ -1,42 +1,31 @@
 #!python
 # write a simple FFNN
 
-'''
-
-single class for network
-networks contains layers which is a list of layers
-each layer is a list of nodes and a list of biases for each node
-each node is a list weights for each node in the previous layer
-
-use sigmoid activation function
-
-
-training
-calculate output error
-for each output node, calculate cost and pass it along weights leading to it and its own bias
-have each node store its cumalitive costs
-once all weights are updated, have each node sum its costs and update it using the same pattern
-
-does this require nodes to be their own objects? probably easiest... but most effecient?
-create a node error list which is a 2d array of the errors for each layer
-
-'''
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 
+'''
 
-class Network():
+contains a class for generating simple neural networks
+
+trains using simple gradient descent
+
+used a sigmoid activation function
+
+minimizes mean squared error
+
+'''
+
+
+class Network():        # could make into a basic RNN by adding a prev values array, and setting that to current values array at the end of calculations
     
-    def __init__(self, layers=[2, 2, 2, 1], rate=0.00005):
+    def __init__(self, layers=[2, 2, 2, 1], rate=0.0001):
         # intakes list with dimmensions of each layer, assumes first layer is input vector
         # rate is training rate to be used later
         self.rate = rate
         self.values = []    # 2d array of the values each node propegated, used for training
         self.layers = []        # each layer is a list of nodes with last object being a list of biases
         for i in range(len(layers)):
-            print('dong')
             layer = layers[i]
             if i == 0:      
                 prev_layer = layer
@@ -57,7 +46,7 @@ class Network():
         return 1/(1 + np.exp(-x))
 
     def sigmoid_p(self, x):
-        return self.sigmoid(x) * (1 - self.sigmoid(x))
+        return self.sigmoid(x) * (1 - self.sigmoid(x))      # if this uses activated x, skip a step and add activated x to values? is it used anywhere else?
 
     def calculate(self, inputs):          # rename this predict?
         self.values = []
@@ -142,7 +131,7 @@ class Network():
                 self.descend(output_set[i])
 
                 # all of this is excess for graphing
-                error = np.subtract(prediction, output_set[i])
+                error = np.subtract(prediction, output_set[i])  # error here could be improved to mean squared
                 error = np.mean(error)
                 avg_costs.append(error)
 
@@ -157,19 +146,12 @@ class Network():
         pass
 
 
-def generate_values():
-    # generate data for an autoencoder?
-    # generate some data akin to what the starcraft bots saw? ie a softmax decision maker?
-    return [[0, 1], [1, 0], [1, 1], [0, 0]], [[1], [1], [0], [0]]
-
-
 classifier = Network()
 
-train_features, train_labels = generate_values()
-costs = classifier.train(train_features, train_labels)
+train_features = [[0, 1], [1, 0], [1, 1], [0, 0]]   # this is just Xor data
+train_labels = [[1], [1], [0], [0]]
 
-#test_features, test_labels = generate_values()
-#classifier.test(test_features, test_labels)
+costs = classifier.train(train_features, train_labels)
 
 plt.plot(costs)
 plt.show()
