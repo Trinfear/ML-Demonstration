@@ -1,6 +1,18 @@
 #!python3
 # Naive Bayes Classifier
 
+'''
+
+predicts the probability of a sentence having a positive or negative sentiment
+
+trains by intaking labeled training data, and finding the probability that the presence of any token, in this case words,
+is correlated with a positive or negative sentiment.
+
+once it is trained the classifier can intake new data and predict if it has a positive or negative sentiment by finding
+its calculated probability for both cases, and returning the case with the higher value.
+
+'''
+
 import random
 import numpy as np
 import math
@@ -9,7 +21,7 @@ from nltk.corpus import movie_reviews
 
 def get_data():
 
-    def most_freq(data_set):
+    def most_freq(data_set):        # this feels kinda clunky and seems to be part of inaccuracy when compared to nltk 
         uniques, counts = np.unique(data_set, return_counts=True)
         data_tuples = [(uniques[i], counts[i]) for i in range(len(counts))]
         data_tuples = sorted(data_tuples, key=lambda x: x[1], reverse=True)
@@ -114,7 +126,7 @@ class BayesClassifier():
 
         return prediction, confidence
 
-    def test(self, data):
+    def test(self, data):   # calculates test accuracy over one iteration of test data
         accuracy = 0
         ave_confidence = 0
         for features in data:
@@ -126,13 +138,8 @@ class BayesClassifier():
         ave_confidence = ave_confidence / len(data)
         return accuracy, ave_confidence
 
-    def most_useful_words(self):
-        # find words with largest difference between pos and neg priors
-        # return the higher over the lower as a value, ie x-1 chance of representing y
-        pass
 
-
-def test_classifier():
+def test_classifier():      # not necessary for import, exists to insure classifier properly functions over several test runs
     clf_accuracy = 0
     ave_confidence = 0
     accuracy_dvt = []
